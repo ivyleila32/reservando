@@ -45,6 +45,7 @@ Restaurant.prototype.obtenerPuntuacion = function () {
 
 }
 */
+//refactorizar//
 Restaurant.prototype.obtenerPuntuacion = function () {
     if (this.calificaciones.length === 0) {
         return 0;

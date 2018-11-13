@@ -65,6 +65,13 @@ describe("calificacion", function () {
     })
 })
 describe("buscarRestaurante(id)", function () {
+    beforeEach(function () {
+        listado = new Listado(
+            new Restaurant(1, "TAO Uptown", "Asiática", "Nueva York", ["13:00", "15:30", "18:00"], "../img/asiatica1.jpg", [6, 7, 9, 10, 5]),
+            new Restaurant(2, "Mandarín Kitchen", "Asiática", "Londres", ["15:00", "14:30", "12:30"], "../img/asiatica2.jpg", [7, 7, 3, 9, 7]),
+            new Restaurant(3, "Burgermeister", "Hamburguesa", "Berlín", ["11:30", "12:00", "22:30"], "../img/hamburguesa4.jpg", [5, 8, 4, 9, 9])
+        );
+
     it("que si existe lo retorne", function () {
         const resto = listado.buscarRestaurante(1);
         expect(resto).to.include({ id: 1 });
@@ -72,31 +79,31 @@ describe("buscarRestaurante(id)", function () {
     it('que si no existe no lo retorne', function () {
         const resto = listado.buscarRestaurante(9999);
         expect(resto).to.equal("No se ha encontrado ningún restaurant");
+    })
+    it("Si le paso el id 2 me devueve el restaurant 'Tao Uptown'", function () {
 
-        it("Si le paso el id 2 me devueve el restaurant 'Tao Uptown'", function () {
+        var resto = listado.buscarRestaurante(2);
+        expect(resto.id).to.eql(2);
 
-            var resto = listado.buscarRestaurante(2);
-            expect(resto.id).to.eql(2);
+    })
+    it("Si le paso el id 6 no debe encontrar un retaurant.", function () {
+        var resto = listado.buscarRestaurante(6);
+        expect(resto.id).to.not.eql(6);
+    })
+    it("Dado un Id con el valor -2 de restaurant se busca en el listado de restaurant.", function () {
+        var resto = listado.buscarRestaurante(-2);
+        expect(resto.id).to.not.eql(-2);
+    })
+    it("Dado un Id que se paso como valor vacio, se busca en el listado de restaurant un restaurant que no existe.", function () {
+        var resto = listado.buscarRestaurante("");
+        expect(resto.id).to.not.eql("");
+    })
 
-        })
-        it("Si le paso el id 6 no debe encontrar un retaurant.", function () {
-            var resto = listado.buscarRestaurante(6);
-            expect(resto.id).to.not.eql(6);
-        })
-        it("Dado un Id con el valor -2 de restaurant se busca en el listado de restaurant.", function () {
-            var resto = listado.buscarRestaurante(-2);
-            expect(resto.id).to.not.eql(-2);
-        })
-        it("Dado un Id que se paso como valor vacio, se busca en el listado de restaurant un restaurant que no existe.", function () {
-            var resto = listado.buscarRestaurante("");
-            expect(resto.id).to.not.eql("");
-        })
+    it("Dado un Id donde se pasa la palabra hola, se busca en el listado de restaurant un restaurant que no existe.", function () {
+        expect((listado.buscarRestaurante("hola")).id).to.not.eql("hola");
+    })
 
-        it("Dado un Id donde se pasa la palabra hola, se busca en el listado de restaurant un restaurant que no existe.", function () {
-            expect((listado.buscarRestaurante("hola")).id).to.not.eql("hola");
-        })
-    });
-
+    })
 })  
 
 describe("obtenerRestaurantes()",function (){
