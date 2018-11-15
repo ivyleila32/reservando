@@ -97,6 +97,7 @@ Listado.prototype.obtenerHorario = function() {
 //Solo se filtra si el valor recibido es distinto de null.
 Listado.prototype.obtenerRestaurantes = function(filtroRubro, filtroCiudad, filtroHorario) {
     var restaurantesFiltrados = this.restaurantes;
+    console.log(this.restaurantes)
     if (filtroRubro !== null) {
         restaurantesFiltrados = restaurantesFiltrados.filter(restaurant => restaurant.rubro == filtroRubro);
     }
@@ -115,66 +116,55 @@ Listado.prototype.obtenerRestaurantes = function(filtroRubro, filtroCiudad, filt
 }
 Listado.prototype.filtrar= function(arregloAFiltar){
 
-//Se crea un nuevo array donde se van a agregar los elementos pero sin repetirse
+    //Se crea un nuevo array donde se van a agregar los elementos pero sin repetirse
    var ElemSinRepetir = arregloAFiltar.filter(function(elem, index, self) {
        return index === self.indexOf(elem);
    });
+   return ElemSinRepetir;
+
 }
 
-Listado.prototype.obtenerHubicacion = function() {
+Listado.prototype.obtenerCiudad = function() {
    //Array donde se van a ir agregando las ciudades (van a estar repetidas)
    var ciudades = [];
-   var listadosCiudades = this.restaurantes.ubicacion;
    //Se recorre el array de restaurantes y se va agregando al array creado, todas las ubicaciones o ciudades encontradas
+   ciudades = this.restaurantes.map(function(restaurant){
+       return restaurant.ubicacion;
+   });
 
-   var ciudades = listadosCiudades.map(function(listadosCiudades){
-       return listadosCiudades
-   })
-
-   return (this.filtar(ciudades)).sort();
+   return (this.filtrar(ciudades)).sort();
 }
 
 //Obtiene todos los rubros de los restaurantes sin repetidos. Su funcionamiento es similar a obtC()
 Listado.prototype.obtenerRubro = function() {
    var rubros = [];
-   var listadosRubros = this.restaurantes.rubro;
-   var rubros = listadosRubros.map(function(listadosRubros){
-       return listadosRubros
-   })
-   var rubrosEncontrados = rubros.filter(function(elem, index, self) {
-       return index === self.indexOf(elem);
+   rubros = this.restaurantes.map(function(restaurante){
+       return restaurante.rubro;
    });
-
-   return (this.filtar(rubros)).sort();
+   return (this.filtrar(rubros)).sort();
 }
 
 //Obtiene todos los horarios de los restaurantes (sin repetidos). Está funcionalidad es un poco más compleja ya que un restaurante
 //tiene un array de horarios. Al buscarlos todos vamos a pasar a tener un array de arrays que luego vamos a tener que
 //convertir en uno solo
 Listado.prototype.obtenerHorario = function() {
-   //En este array se van a cargar los arrays de horarios, que luego vamos convertir en un solo array
-   var arregloHorarios = [];
-   var ListadosHorarios =this.restaurantes[i].horarios;
-   //Recorremos el array de restaurantes y vamos agregando todos los array de horarios
-
-   var arregloHorarios = listadosCiudades.map(function(listadosCiudades){
-       return listadosCiudades
-   })
-   //En este arreglo vamos a poner todos los horarios, uno por uno
-   var horarios = [];
-   arregloHorarios.forEach(function(a) {
-       a.forEach(function(horario) {
-           horarios.push(horario)
-       });
-   });
-   return (this.filtar(horarios)).sort();
+    //En este array se van a cargar los arrays de horarios, que luego vamos convertir en un solo array
+    var horarios = [];
+    //Recorremos el array de restaurantes y vamos agregando todos los array de horarios
+    horarios = this.restaurantes.reduce(function(acum, restoActual) {
+        return acum.concat(restoActual.horarios);
+    }, []);
+    return (this.filtrar(horarios)).sort();
 }
 
 Listado.prototype.buscarRestaurante = function(id) {
-    var rest = listadoDeRestaurantes.find(function(element){
+    var rest = this.restaurantes.find(function(element){
         return element.id === id;
     });
-    return "No se ha encontrado ningún restaurant";
+    if (!rest)  {
+        return "No se ha encontrado ningún restaurant";
+    }
+    return rest;
  }
 
 //Se crea el listado de restaurantes de la aplicación. Si queres agregar un restaurante nuevo, podes agregarlo desde aca, siempre

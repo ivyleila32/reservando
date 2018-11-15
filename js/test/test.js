@@ -65,22 +65,26 @@ describe("calificacion", function () {
     })
 })
 describe("buscarRestaurante(id)", function () {
+    var listado;
     beforeEach(function () {
-        listado = new Listado(
+        listado = new Listado ([
             new Restaurant(1, "TAO Uptown", "Asiática", "Nueva York", ["13:00", "15:30", "18:00"], "../img/asiatica1.jpg", [6, 7, 9, 10, 5]),
             new Restaurant(2, "Mandarín Kitchen", "Asiática", "Londres", ["15:00", "14:30", "12:30"], "../img/asiatica2.jpg", [7, 7, 3, 9, 7]),
             new Restaurant(3, "Burgermeister", "Hamburguesa", "Berlín", ["11:30", "12:00", "22:30"], "../img/hamburguesa4.jpg", [5, 8, 4, 9, 9])
-        );
+        ]);
+    });
 
     it("que si existe lo retorne", function () {
         const resto = listado.buscarRestaurante(1);
         expect(resto).to.include({ id: 1 });
     })
+
     it('que si no existe no lo retorne', function () {
         const resto = listado.buscarRestaurante(9999);
         expect(resto).to.equal("No se ha encontrado ningún restaurant");
     })
-    it("Si le paso el id 2 me devueve el restaurant 'Tao Uptown'", function () {
+
+    it("Si le paso el id 2 me devueve el restaurant 'mandarin Kitchen'", function () {
 
         var resto = listado.buscarRestaurante(2);
         expect(resto.id).to.eql(2);
@@ -88,6 +92,7 @@ describe("buscarRestaurante(id)", function () {
     })
     it("Si le paso el id 6 no debe encontrar un retaurant.", function () {
         var resto = listado.buscarRestaurante(6);
+        console.log(resto)
         expect(resto.id).to.not.eql(6);
     })
     it("Dado un Id con el valor -2 de restaurant se busca en el listado de restaurant.", function () {
@@ -102,11 +107,17 @@ describe("buscarRestaurante(id)", function () {
     it("Dado un Id donde se pasa la palabra hola, se busca en el listado de restaurant un restaurant que no existe.", function () {
         expect((listado.buscarRestaurante("hola")).id).to.not.eql("hola");
     })
-
-    })
 })  
 
 describe("obtenerRestaurantes()",function (){
+    beforeEach(function () {
+        listado = new Listado([
+            new Restaurant(1, "TAO Uptown", "Asiática", "Nueva York", ["13:00", "15:30", "18:00"], "../img/asiatica1.jpg", [6, 7, 9, 10, 5]),
+            new Restaurant(2, "Mandarín Kitchen", "Asiática", "Londres", ["15:00", "14:30", "12:30"], "../img/asiatica2.jpg", [7, 7, 3, 9, 7]),
+            new Restaurant(3, "Burgermeister", "Hamburguesa", "Berlín", ["11:30", "12:00", "22:30"], "../img/hamburguesa4.jpg", [5, 8, 4, 9, 9])
+        ]);
+    });
+
     it("Dado un rubro, cuidad y horario existente me devuelve un restaurant", function(){
         var restObtenido = listado.obtenerRestaurantes("Asiática", "Nueva York","13:00")
         //validar rubro
@@ -132,6 +143,34 @@ describe("obtenerRestaurantes()",function (){
         
     })
 })
+
+describe("calcularpreciobase()", function () {
+    var reserva1;
+    var reserva2
+    beforeEach(function () {
+        reserva1 = new Reserva (new Date(2018, 7, 24, 11, 00), 8, 350, "DES1");
+        reserva2 = new Reserva (new Date(2018, 7, 27, 14, 100), 2, 150, "DES200");
+    });
+    
+    it("Que una reserva calcule correctamente su precio base", function() {
+        expect(reserva1.calcularPrecioBase()).to.equal(2800);
+        expect(reserva2.calcularPrecioBase()).to.equal(300);
+    })
+
+    it("Que una reserva  calcule correctamente su precio adicional", function() {
+        expect(reserva1.calcularAdicionales()).to.equal(280);
+    })
+    
+    it("Que una reserva  calcule correctamente su descuento", function() {
+        expect(reserva1.calcularDescuentos()).to.equal(630);
+    })
+
+    it("Que una reserva calcule correctamente su precio final", function() { 
+        expect(reserva1.calcularPrecioFinal()).to.equal(2450);
+        expect(reserva2.calcularPrecioFinal()).to.equal(100);
+    })
+
+});
 
 
 
