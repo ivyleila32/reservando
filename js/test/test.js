@@ -150,21 +150,61 @@ describe("calcularpreciobase()", function () {
     beforeEach(function () {
         reserva1 = new Reserva (new Date(2018, 7, 24, 11, 00), 8, 350, "DES1");
         reserva2 = new Reserva (new Date(2018, 7, 27, 14, 100), 2, 150, "DES200");
+        
     });
     
     it("Que una reserva calcule correctamente su precio base", function() {
         expect(reserva1.calcularPrecioBase()).to.equal(2800);
         expect(reserva2.calcularPrecioBase()).to.equal(300);
     })
+    it("que no permita numeros negativos",function() {
+        var  reserva3 = new Reserva (new Date(2018, 7, 23, 14, 00), -2, 250, "DES1" );    
+        expect(reserva3.calcularPrecioBase()).to.eql(0);
+    })
+    it("que no permita espacios vacios",function() {
+        var  reserva4 = new Reserva (new Date(2018, 7, 23, 14, 00),"" , 250, "DES1" );    
+        expect(reserva4.calcularPrecioBase()).to.eql(0);
+    }) 
+    it("que no permita caracteres",function() {
+        var  reserva5 = new Reserva (new Date(2018, 7, 23, 14, 00),"a" , 250, "DES1" );    
+        expect(reserva5.calcularPrecioBase()).to.eql(0);
+    })       
 
+})    
+describe("calcularAdicional()", function () {
+    var reserva1;
+    var reserva2
+    beforeEach(function () {
+        reserva1 = new Reserva (new Date(2018, 7, 24, 11, 00), 8, 350, "DES1");
+        reserva2 = new Reserva (new Date(2018, 7, 27, 14, 100), 2, 150, "DES200");
+    });    
     it("Que una reserva  calcule correctamente su precio adicional", function() {
         expect(reserva1.calcularAdicionales()).to.equal(280);
+        expect(reserva2.calcularAdicionales()).to.equal(0);
     })
+
+})    
+
+describe("calcularDescuento()", function () {
+    var reserva1;
+    var reserva2
+    beforeEach(function () {
+        reserva1 = new Reserva (new Date(2018, 7, 24, 11, 00), 8, 350, "DES1");
+        reserva2 = new Reserva (new Date(2018, 7, 27, 14, 100), 2, 150, "DES200");
+    });    
     
     it("Que una reserva  calcule correctamente su descuento", function() {
         expect(reserva1.calcularDescuentos()).to.equal(630);
+        expect(reserva2.calcularDescuentos()).to.equal(200);
     })
-
+})    
+describe("calcularPrecioFinal()", function () {
+    var reserva1;
+    var reserva2
+    beforeEach(function () {
+        reserva1 = new Reserva(new Date(2018, 7, 24, 11, 00), 8, 350, "DES1");
+        reserva2 = new Reserva(new Date(2018, 7, 27, 14, 100), 2, 150, "DES200");
+    });    
     it("Que una reserva calcule correctamente su precio final", function() { 
         expect(reserva1.calcularPrecioFinal()).to.equal(2450);
         expect(reserva2.calcularPrecioFinal()).to.equal(100);

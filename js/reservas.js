@@ -7,6 +7,12 @@ const Reserva = function (horario, cantPersonas, precioXPersona, codigoDesc) {
 };
 
 Reserva.prototype.calcularPrecioBase = function () {
+    if(isNaN(this.cantPersonas) || isNaN(this.precioXPersona) ) {
+        return 0;
+    }
+    if(this.cantPersonas<0 || this.precioXPersona<0){
+        return 0;
+    } 
     return this.cantPersonas * this.precioXPersona;
 };
 Reserva.prototype.calcularAdicionales = function () { 
